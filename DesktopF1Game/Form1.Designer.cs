@@ -30,8 +30,8 @@
         {
             tabControl1 = new TabControl();
             tabPilots = new TabPage();
+            dataGridView1 = new DataGridView();
             label3 = new Label();
-            listBox5 = new ListBox();
             listBox1 = new ListBox();
             label1 = new Label();
             tabPage2 = new TabPage();
@@ -56,6 +56,7 @@
             button2 = new Button();
             tabControl1.SuspendLayout();
             tabPilots.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)dataGridView1).BeginInit();
             tabPage2.SuspendLayout();
             tabPage3.SuspendLayout();
             tabPage4.SuspendLayout();
@@ -78,8 +79,8 @@
             // 
             // tabPilots
             // 
+            tabPilots.Controls.Add(dataGridView1);
             tabPilots.Controls.Add(label3);
-            tabPilots.Controls.Add(listBox5);
             tabPilots.Controls.Add(listBox1);
             tabPilots.Controls.Add(label1);
             tabPilots.Location = new Point(4, 24);
@@ -89,6 +90,14 @@
             tabPilots.TabIndex = 0;
             tabPilots.Text = "Pilots & Teams";
             tabPilots.UseVisualStyleBackColor = true;
+            // 
+            // dataGridView1
+            // 
+            dataGridView1.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dataGridView1.Location = new Point(880, 61);
+            dataGridView1.Name = "dataGridView1";
+            dataGridView1.Size = new Size(475, 487);
+            dataGridView1.TabIndex = 4;
             // 
             // label3
             // 
@@ -100,16 +109,6 @@
             label3.Size = new Size(153, 39);
             label3.TabIndex = 3;
             label3.Text = "F1 Tracks";
-            // 
-            // listBox5
-            // 
-            listBox5.FormattingEnabled = true;
-            listBox5.ItemHeight = 23;
-            listBox5.Items.AddRange(new object[] { "var1", "var2", "var3" });
-            listBox5.Location = new Point(872, 61);
-            listBox5.Name = "listBox5";
-            listBox5.Size = new Size(444, 487);
-            listBox5.TabIndex = 2;
             // 
             // listBox1
             // 
@@ -250,7 +249,7 @@
             label6.AutoSize = true;
             label6.Font = new Font("Constantia", 18F, FontStyle.Bold | FontStyle.Italic, GraphicsUnit.Point, 204);
             label6.ForeColor = Color.Black;
-            label6.Location = new Point(717, 19);
+            label6.Location = new Point(792, 26);
             label6.Name = "label6";
             label6.Size = new Size(172, 29);
             label6.TabIndex = 5;
@@ -363,6 +362,7 @@
             tabControl1.ResumeLayout(false);
             tabPilots.ResumeLayout(false);
             tabPilots.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)dataGridView1).EndInit();
             tabPage2.ResumeLayout(false);
             tabPage2.PerformLayout();
             tabPage3.ResumeLayout(false);
@@ -388,7 +388,6 @@
         private ListBox listBox2;
         private Label label2;
         private Label label3;
-        private ListBox listBox5;
         private Label label5;
         private Label label4;
         private ListBox listBox7;
@@ -400,5 +399,6 @@
         private Label label10;
         private ListBox listBox9;
         private ListBox listBox8;
+        private DataGridView dataGridView1;
     }
 }

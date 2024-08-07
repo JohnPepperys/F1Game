@@ -34,10 +34,19 @@ namespace DesktopF1Game
 
         private void TabControlTrack_LoadData()
         {
-            this.listBox5.Items.Clear();
-            this.listBox5.Items.Add("#\tName \tCountry");
-            foreach (var track in Championship.GetAllTracks())
-                this.listBox5.Items.Add($"{track.ID}  {track.Name}\t\t{track.Country}");
+            //this.listBox5.Items.Clear();
+            //this.listBox5.Items.Add("#\tName \tCountry");
+            //foreach (var track in Championship.GetAllTracks())
+            //    this.listBox5.Items.Add($"{track.ID}  {track.Name}\t\t{track.Country}");
+            this.dataGridView1.BorderStyle = BorderStyle.None;
+            this.dataGridView1.CellBorderStyle = DataGridViewCellBorderStyle.None;
+            this.dataGridView1.ReadOnly = true;
+            this.dataGridView1.RowHeadersVisible = false;
+            this.dataGridView1.DataSource = Championship.GetAllTracks();
+            this.dataGridView1.Columns["ID"].Visible = false;
+            this.dataGridView1.Columns["Distance"].Visible = false;
+            this.dataGridView1.Columns["IsCityTrack"].Visible = false;
+            this.dataGridView1.AutoResizeColumns();
         }
 
         private void TabControlPilot_LoadData()
@@ -94,11 +103,19 @@ namespace DesktopF1Game
                     break;
 
                 case RaceWeekendStatus.FinishRace:
-                    // go to tournament tab
-                    tabControl1.SelectedIndex = 3;
-                    FillInTournamentPage();
-                    button2.Text = "Start next weekend";
-                    Championship.NextStage();
+                    if (button2.Text.ToLower() == "start next weekend")
+                    {
+                        button2.Text = "Start Qualification";
+                        Championship.NextStage();
+                        tabControl1.SelectedIndex = 1;      // перемещаемся на квалификацию
+                    }
+                    else
+                    {
+                        // go to tournament tab
+                        tabControl1.SelectedIndex = 3;   
+                        FillInTournamentPage();
+                        button2.Text = "Start next weekend";
+                    }
                     break;
 
                 default:
@@ -144,7 +161,16 @@ namespace DesktopF1Game
                     // turn to race page
                     tabControl1.SelectedIndex = 2;
                     break;
-                
+
+                case RaceWeekendStatus.FinishRace:
+                    if (button2.Text.ToLower() == "start next weekend")
+                    {
+                        button2.Text = "Start Qualification";
+                        Championship.NextStage();
+                        tabControl1.SelectedIndex = 1;      // перемещаемся на квалификацию
+                    }
+                    break;
+
                 default:
                     this.label2.Text = "No choose racing weekend!";
                     break;
@@ -227,12 +253,12 @@ namespace DesktopF1Game
                     break;
 
                 case RaceWeekendStatus.FinishQ3:
+                case RaceWeekendStatus.FinishRace:
                     // print result
                     PrintQ1Result(nowTrack, this.listBox2, 1);
                     PrintQ1Result(nowTrack, this.listBox3, 2);
                     PrintQ1Result(nowTrack, this.listBox4, 3);
                     button1.Text = "Next to Race!";
-                    button2.Text = "Next to Race!";
                     break;
 
                 default:
@@ -257,7 +283,6 @@ namespace DesktopF1Game
             if (status == RaceWeekendStatus.FinishQ3 || status == RaceWeekendStatus.FinishRace)
             {
                 // pre race - очищаем поля, выводим инфо от треке
-                button2.Text = "Start Race!";
                 var track = Championship.GetAllTracks().FirstOrDefault(t => t.ID == nowTrack);
                 label4.Text = $"F1 race on {track.Name} track in {track.Country}";
                 label6.Text = "Sunny weather";
@@ -339,6 +364,8 @@ namespace DesktopF1Game
                 return;
             }
 
+            lb.Items.Add($"Result of Segment #{segment}");
+            lb.Items.Add("");
             var pilots = Championship.GetAllPilots();
             int pos = 1;
             List<StageResultPilot> segmentRes;

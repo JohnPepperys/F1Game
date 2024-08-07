@@ -226,7 +226,7 @@ namespace GameClass
         private static List<StageResultPilot> MakeOneLapForAllPilots(int trackid, IEnumerable<int> pilotList)
         {
             // check income params
-            if (trackid < 0 || trackid >= _Tracks.Count())
+            if (trackid < 0 || trackid > _Tracks.Count())
                 throw new ArgumentException("Unnormal track ID.");
             if (pilotList == null || pilotList.Count() < 8)
                 throw new Exception("Unnormal pilots list");

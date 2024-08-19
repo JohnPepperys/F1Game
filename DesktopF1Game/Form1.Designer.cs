@@ -30,9 +30,9 @@
         {
             tabControl1 = new TabControl();
             tabPilots = new TabPage();
+            dataGridView2 = new DataGridView();
             dataGridView1 = new DataGridView();
             label3 = new Label();
-            listBox1 = new ListBox();
             label1 = new Label();
             tabPage2 = new TabPage();
             label2 = new Label();
@@ -50,16 +50,21 @@
             listBox7 = new ListBox();
             listBox6 = new ListBox();
             tabPage4 = new TabPage();
-            listBox9 = new ListBox();
-            listBox8 = new ListBox();
+            dataGridView3 = new DataGridView();
+            label11 = new Label();
             label10 = new Label();
             button2 = new Button();
+            dataGridView4 = new DataGridView();
+            label12 = new Label();
             tabControl1.SuspendLayout();
             tabPilots.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)dataGridView2).BeginInit();
             ((System.ComponentModel.ISupportInitialize)dataGridView1).BeginInit();
             tabPage2.SuspendLayout();
             tabPage3.SuspendLayout();
             tabPage4.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)dataGridView3).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)dataGridView4).BeginInit();
             SuspendLayout();
             // 
             // tabControl1
@@ -73,30 +78,39 @@
             tabControl1.Location = new Point(28, 51);
             tabControl1.Name = "tabControl1";
             tabControl1.SelectedIndex = 0;
-            tabControl1.Size = new Size(1396, 627);
+            tabControl1.Size = new Size(1396, 647);
             tabControl1.TabIndex = 0;
             tabControl1.SelectedIndexChanged += tabControl1_SelectedIndexChanged;
             // 
             // tabPilots
             // 
+            tabPilots.Controls.Add(dataGridView2);
             tabPilots.Controls.Add(dataGridView1);
             tabPilots.Controls.Add(label3);
-            tabPilots.Controls.Add(listBox1);
             tabPilots.Controls.Add(label1);
             tabPilots.Location = new Point(4, 24);
             tabPilots.Name = "tabPilots";
             tabPilots.Padding = new Padding(3);
-            tabPilots.Size = new Size(1388, 599);
+            tabPilots.Size = new Size(1388, 619);
             tabPilots.TabIndex = 0;
             tabPilots.Text = "Pilots & Teams";
             tabPilots.UseVisualStyleBackColor = true;
             // 
+            // dataGridView2
+            // 
+            dataGridView2.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dataGridView2.Location = new Point(38, 45);
+            dataGridView2.Name = "dataGridView2";
+            dataGridView2.RowTemplate.Height = 26;
+            dataGridView2.Size = new Size(806, 551);
+            dataGridView2.TabIndex = 5;
+            // 
             // dataGridView1
             // 
             dataGridView1.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridView1.Location = new Point(880, 61);
+            dataGridView1.Location = new Point(880, 45);
             dataGridView1.Name = "dataGridView1";
-            dataGridView1.Size = new Size(475, 487);
+            dataGridView1.Size = new Size(475, 551);
             dataGridView1.TabIndex = 4;
             // 
             // label3
@@ -104,28 +118,18 @@
             label3.AutoSize = true;
             label3.Font = new Font("Constantia", 24F, FontStyle.Bold | FontStyle.Italic, GraphicsUnit.Point, 204);
             label3.ForeColor = Color.Red;
-            label3.Location = new Point(1028, 19);
+            label3.Location = new Point(1052, 3);
             label3.Name = "label3";
             label3.Size = new Size(153, 39);
             label3.TabIndex = 3;
             label3.Text = "F1 Tracks";
-            // 
-            // listBox1
-            // 
-            listBox1.FormattingEnabled = true;
-            listBox1.ItemHeight = 23;
-            listBox1.Items.AddRange(new object[] { "var1", "var2", "var3" });
-            listBox1.Location = new Point(84, 61);
-            listBox1.Name = "listBox1";
-            listBox1.Size = new Size(742, 487);
-            listBox1.TabIndex = 1;
             // 
             // label1
             // 
             label1.AutoSize = true;
             label1.Font = new Font("Constantia", 24F, FontStyle.Bold | FontStyle.Italic, GraphicsUnit.Point, 204);
             label1.ForeColor = Color.Red;
-            label1.Location = new Point(363, 19);
+            label1.Location = new Point(359, 3);
             label1.Name = "label1";
             label1.Size = new Size(141, 39);
             label1.TabIndex = 0;
@@ -142,7 +146,7 @@
             tabPage2.Location = new Point(4, 24);
             tabPage2.Name = "tabPage2";
             tabPage2.Padding = new Padding(3);
-            tabPage2.Size = new Size(1388, 599);
+            tabPage2.Size = new Size(1388, 619);
             tabPage2.TabIndex = 1;
             tabPage2.Text = "Qualification";
             tabPage2.UseVisualStyleBackColor = true;
@@ -207,7 +211,7 @@
             tabPage3.Controls.Add(listBox6);
             tabPage3.Location = new Point(4, 24);
             tabPage3.Name = "tabPage3";
-            tabPage3.Size = new Size(1388, 599);
+            tabPage3.Size = new Size(1388, 619);
             tabPage3.TabIndex = 2;
             tabPage3.Text = "Race";
             tabPage3.UseVisualStyleBackColor = true;
@@ -297,34 +301,37 @@
             // 
             // tabPage4
             // 
-            tabPage4.Controls.Add(listBox9);
-            tabPage4.Controls.Add(listBox8);
+            tabPage4.Controls.Add(label12);
+            tabPage4.Controls.Add(dataGridView4);
+            tabPage4.Controls.Add(dataGridView3);
+            tabPage4.Controls.Add(label11);
             tabPage4.Controls.Add(label10);
             tabPage4.Font = new Font("Sitka Small", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 204);
             tabPage4.Location = new Point(4, 24);
             tabPage4.Name = "tabPage4";
-            tabPage4.Size = new Size(1388, 599);
+            tabPage4.Size = new Size(1388, 619);
             tabPage4.TabIndex = 3;
             tabPage4.Text = "Tournament";
             tabPage4.UseVisualStyleBackColor = true;
             // 
-            // listBox9
+            // dataGridView3
             // 
-            listBox9.FormattingEnabled = true;
-            listBox9.ItemHeight = 28;
-            listBox9.Location = new Point(894, 94);
-            listBox9.Name = "listBox9";
-            listBox9.Size = new Size(447, 452);
-            listBox9.TabIndex = 6;
+            dataGridView3.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dataGridView3.Location = new Point(33, 114);
+            dataGridView3.Name = "dataGridView3";
+            dataGridView3.Size = new Size(737, 452);
+            dataGridView3.TabIndex = 8;
             // 
-            // listBox8
+            // label11
             // 
-            listBox8.FormattingEnabled = true;
-            listBox8.ItemHeight = 28;
-            listBox8.Location = new Point(73, 94);
-            listBox8.Name = "listBox8";
-            listBox8.Size = new Size(743, 452);
-            listBox8.TabIndex = 5;
+            label11.AutoSize = true;
+            label11.Font = new Font("Constantia", 15.75F, FontStyle.Bold | FontStyle.Italic, GraphicsUnit.Point, 204);
+            label11.ForeColor = Color.Black;
+            label11.Location = new Point(579, 59);
+            label11.Name = "label11";
+            label11.Size = new Size(201, 26);
+            label11.TabIndex = 7;
+            label11.Text = "Race Start position";
             // 
             // label10
             // 
@@ -341,13 +348,33 @@
             // button2
             // 
             button2.Font = new Font("Showcard Gothic", 18F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            button2.Location = new Point(1045, 704);
+            button2.Location = new Point(1049, 713);
             button2.Name = "button2";
             button2.Size = new Size(303, 84);
             button2.TabIndex = 2;
             button2.Text = "Start Championship!";
             button2.UseVisualStyleBackColor = true;
             button2.Click += button2_Click;
+            // 
+            // dataGridView4
+            // 
+            dataGridView4.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dataGridView4.Location = new Point(868, 160);
+            dataGridView4.Name = "dataGridView4";
+            dataGridView4.Size = new Size(477, 406);
+            dataGridView4.TabIndex = 9;
+            // 
+            // label12
+            // 
+            label12.AutoSize = true;
+            label12.Font = new Font("Constantia", 15.75F, FontStyle.Bold | FontStyle.Italic, GraphicsUnit.Point, 204);
+            label12.ForeColor = Color.Black;
+            label12.Location = new Point(1017, 114);
+            label12.Name = "label12";
+            label12.Size = new Size(201, 26);
+            label12.TabIndex = 10;
+            label12.Text = "Race Start position";
+            label12.Click += label12_Click;
             // 
             // Form1
             // 
@@ -362,6 +389,7 @@
             tabControl1.ResumeLayout(false);
             tabPilots.ResumeLayout(false);
             tabPilots.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)dataGridView2).EndInit();
             ((System.ComponentModel.ISupportInitialize)dataGridView1).EndInit();
             tabPage2.ResumeLayout(false);
             tabPage2.PerformLayout();
@@ -369,6 +397,8 @@
             tabPage3.PerformLayout();
             tabPage4.ResumeLayout(false);
             tabPage4.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)dataGridView3).EndInit();
+            ((System.ComponentModel.ISupportInitialize)dataGridView4).EndInit();
             ResumeLayout(false);
         }
 
@@ -381,7 +411,6 @@
         private TabPage tabPage3;
         private TabPage tabPage4;
         private Label label1;
-        private ListBox listBox1;
         private Button button1;
         private ListBox listBox4;
         private ListBox listBox3;
@@ -397,8 +426,11 @@
         private Label label7;
         private Label label6;
         private Label label10;
-        private ListBox listBox9;
-        private ListBox listBox8;
         private DataGridView dataGridView1;
+        private Label label11;
+        private DataGridView dataGridView2;
+        private DataGridView dataGridView3;
+        private Label label12;
+        private DataGridView dataGridView4;
     }
 }

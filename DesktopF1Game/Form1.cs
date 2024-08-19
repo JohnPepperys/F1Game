@@ -34,10 +34,7 @@ namespace DesktopF1Game
 
         private void TabControlTrack_LoadData()
         {
-            //this.listBox5.Items.Clear();
-            //this.listBox5.Items.Add("#\tName \tCountry");
-            //foreach (var track in Championship.GetAllTracks())
-            //    this.listBox5.Items.Add($"{track.ID}  {track.Name}\t\t{track.Country}");
+            // output 
             this.dataGridView1.BorderStyle = BorderStyle.None;
             this.dataGridView1.CellBorderStyle = DataGridViewCellBorderStyle.None;
             this.dataGridView1.ReadOnly = true;
@@ -46,15 +43,58 @@ namespace DesktopF1Game
             this.dataGridView1.Columns["ID"].Visible = false;
             this.dataGridView1.Columns["Distance"].Visible = false;
             this.dataGridView1.Columns["IsCityTrack"].Visible = false;
-            this.dataGridView1.AutoResizeColumns();
+
+            this.dataGridView1.Columns["Name"].Width = 200;
+            this.dataGridView1.Columns["Name"].HeaderText = "Track";
+
+
+            this.dataGridView1.Columns["Country"].Width = 215;
+
+            this.dataGridView1.Columns["laps"].Width = 60;
+            this.dataGridView1.Columns["laps"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
         }
 
         private void TabControlPilot_LoadData()
         {
-            this.listBox1.Items.Clear();
-            this.listBox1.Items.Add("#\tName Surname\t\tTeam\tCountry");
-            foreach (var pilot in Championship.GetAllPilots())
-                this.listBox1.Items.Add($"{pilot.Number}\t{pilot.FullName}\t\t{pilot.Team.Name}\t{pilot.Country}");
+            var pilotList = Championship.GetAllPilots().ToList();
+            this.dataGridView2.BorderStyle = BorderStyle.None;
+            this.dataGridView2.CellBorderStyle = DataGridViewCellBorderStyle.None;
+            this.dataGridView2.RowHeadersVisible = false;
+            this.dataGridView2.DataSource = pilotList;
+            this.dataGridView2.ReadOnly = true;
+
+            this.dataGridView2.Columns["Surname"].Visible = false;
+            this.dataGridView2.Columns["Name"].Visible = false;
+            this.dataGridView2.Columns["ShortName"].Visible = false;
+            this.dataGridView2.Columns["Races"].Visible = false;
+            this.dataGridView2.Columns["Team"].Visible = false;
+
+            this.dataGridView2.Columns["Number"].DisplayIndex = 0;
+            this.dataGridView2.Columns["Number"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            this.dataGridView2.Columns["Number"].Width = 52;
+
+            this.dataGridView2.Columns["FullName"].DisplayIndex = 1;
+            this.dataGridView2.Columns["FullName"].Width = 224;
+
+            this.dataGridView2.Columns["Country"].DisplayIndex = 3;
+            this.dataGridView2.Columns["Country"].Width = 150;
+
+            this.dataGridView2.Columns["Age"].DisplayIndex = 4;
+            this.dataGridView2.Columns["Age"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            this.dataGridView2.Columns["Age"].Width = 50;
+
+            this.dataGridView2.Columns.Add(new DataGridViewColumn()
+            {
+                HeaderText = "Team",
+                Name = "TeamStr",
+                CellTemplate = new DataGridViewTextBoxCell(),
+                DisplayIndex = 2,
+                Width = 330
+            });
+            for (int i = 0; i < dataGridView2.Rows.Count; i++)
+            {
+                dataGridView2.Rows[i].Cells["TeamStr"].Value = pilotList[i].Team.FullName;
+            }
         }
 
         private void listBox3_SelectedIndexChanged(object sender, EventArgs e)
@@ -74,7 +114,7 @@ namespace DesktopF1Game
             {
                 case RaceWeekendStatus.BeforeChampionshipStart:
                     // Choose track, start weekend - go to qualification:
-                    label10.Text = "Formula 1 Championsip 2023";
+                    label10.Text = "Formula 1 Championship 2024";
                     Championship.NextStage();
                     button2.Text = "Start Qualification!";
                     tabControl1.SelectedIndex = 1;
@@ -112,10 +152,14 @@ namespace DesktopF1Game
                     else
                     {
                         // go to tournament tab
-                        tabControl1.SelectedIndex = 3;   
+                        tabControl1.SelectedIndex = 3;
                         FillInTournamentPage();
                         button2.Text = "Start next weekend";
                     }
+                    break;
+
+                case RaceWeekendStatus.FinishChampionship:
+                    button2.IsAccessible = false;   // пока здесь делаем кнопку неактивной, если закончились все трассы, но далее надо сделать обнуление чемпионата.
                     break;
 
                 default:
@@ -139,7 +183,7 @@ namespace DesktopF1Game
                     PrintQ1Result(nowTrack, this.listBox2, 1);
                     button1.Text = "Start Q2!";
                     break;
-                
+
                 case RaceWeekendStatus.FinishQ1:
                     // make Q2:
                     Championship.MakeQualification(nowTrack);
@@ -147,7 +191,7 @@ namespace DesktopF1Game
                     PrintQ1Result(nowTrack, this.listBox3, 2);
                     button1.Text = "Start Q3!";
                     break;
-                
+
                 case RaceWeekendStatus.FinishQ2:
                     // make Q3:
                     Championship.MakeQualification(nowTrack);
@@ -156,7 +200,7 @@ namespace DesktopF1Game
                     button1.Text = "Next to Race!";
                     button2.Text = "Next to Race!";
                     break;
-                
+
                 case RaceWeekendStatus.FinishQ3:
                     // turn to race page
                     tabControl1.SelectedIndex = 2;
@@ -193,7 +237,7 @@ namespace DesktopF1Game
             (int nowTrack, RaceWeekendStatus status) = Championship.GetWeekendStatus();     // получаем текущий статус чемпионата
             if (status == RaceWeekendStatus.BeforeChampionshipStart)                        // если чемпионат еще не начат, то и нечего тут менять
                 return;
-           
+
             switch (tabControl1.SelectedIndex)
             {
                 case 0:
@@ -214,22 +258,60 @@ namespace DesktopF1Game
 
         private void FillInTournamentPage()
         {
-            listBox8.Items.Clear();
-            listBox8.Items.Add("Pilots championship standings");
-            listBox8.Items.Add("");
-            foreach (var str in Championship.GetPilotsStanding())
-                listBox8.Items.Add(str);
+            this.dataGridView3.BorderStyle = BorderStyle.None;
+            this.dataGridView3.CellBorderStyle = DataGridViewCellBorderStyle.None;
+            this.dataGridView3.RowHeadersVisible = false;
+            this.dataGridView3.ReadOnly = true;
+            this.dataGridView3.DataSource = Championship.GetPilotsStanding();
+            var currentSize = this.dataGridView3.Font.Size;
+            var normalFont = new Font(this.dataGridView3.Font.FontFamily, currentSize, FontStyle.Regular);
+            this.dataGridView3.Columns["pos"].Width = 50;
+            this.dataGridView3.Columns["name"].Width = 270;
+            this.dataGridView3.Columns["pnum"].Width = 40;
+            this.dataGridView3.Columns["pnum"].HeaderText = "#";
+            this.dataGridView3.Columns["pnum"].DefaultCellStyle.Font = normalFont;
+            this.dataGridView3.Columns["point"].Width = 90;
+            this.dataGridView3.Columns["point"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            this.dataGridView3.Columns["top"].Width = 60;
+            this.dataGridView3.Columns["top"].DefaultCellStyle.Font = normalFont;
+            this.dataGridView3.Columns["top"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            this.dataGridView3.Columns["team"].Width = 210;
+            this.dataGridView3.Columns["team"].DefaultCellStyle.Font = normalFont;
+            //listBox8.Items.Clear();
+            //listBox8.Items.Add("Pilots championship standings");
+            //listBox8.Items.Add("");
+            //foreach (var str in Championship.GetPilotsStanding())
+            //    listBox8.Items.Add(str);
 
-            listBox9.Items.Clear();
-            listBox9.Items.Add("Teams position");
-            listBox9.Items.Add("");
-            foreach (var str in Championship.GetTeamsStanding())
-                listBox9.Items.Add(str);
+            label12.Text = "Team position";
+            this.dataGridView4.BorderStyle = BorderStyle.None;
+            this.dataGridView4.CellBorderStyle = DataGridViewCellBorderStyle.None;
+            this.dataGridView4.RowHeadersVisible = false;
+            this.dataGridView4.ReadOnly = true;
+            this.dataGridView4.DataSource = Championship.GetTeamsStanding();
+            this.dataGridView4.Columns["pos"].Width = 50;
+            this.dataGridView4.Columns["name"].Width = 275;
+            this.dataGridView4.Columns["point"].Width = 92;
+            this.dataGridView4.Columns["point"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
+
+            this.dataGridView4.Columns["last"].Width = 60;
+            this.dataGridView4.Columns["last"].DefaultCellStyle.Font = normalFont;
+            this.dataGridView4.Columns["last"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
+
+            //listBox9.Items.Clear();
+            //listBox9.Items.Add("Teams position");
+            //listBox9.Items.Add("");
+            //foreach (var str in Championship.GetTeamsStanding())
+            //    listBox9.Items.Add(str);
+
+            var tracks = Championship.GetAllTracks().ToList();
+            (int nowTrack, RaceWeekendStatus status) = Championship.GetWeekendStatus();
+            label11.Text = $"After {tracks.FindIndex(x => x.ID == nowTrack) + 1} races from {tracks.Count()} in championship.";
         }
 
 
 
-        
+
         private void FillInQualificationPage()
         {
             listBox2.Items.Clear();
@@ -291,12 +373,13 @@ namespace DesktopF1Game
                 label9.Text = "";
                 listBox6.Items.Clear();
                 listBox7.Items.Clear();
-                
+
                 // достаем состав пилотов и данные квалификации
                 var result = Championship.GetRaceResultForTrack(nowTrack);
                 var pilots = Championship.GetAllPilots();
                 int pp = 1;
-                foreach (var res in result.Q3Result) {
+                foreach (var res in result.Q3Result)
+                {
                     var pilot = pilots.First(x => x.Number == res.PID);
                     listBox6.Items.Add($"{pp++}\t#{res.PID} {pilot.FullName} {pilot.Team.Name}");
                 }
@@ -321,14 +404,16 @@ namespace DesktopF1Game
                     label9.Text = $"Winner: {winner.FullName} {winner.Team.Name}";
 
                     // print other pilots info
-                    for (int i = 1; i < result.RaceRes.Count(); i++) {
+                    for (int i = 1; i < result.RaceRes.Count(); i++)
+                    {
                         var pilot = pilots.First(x => x.Number == result.RaceRes[i].PID);
                         if (result.RaceRes[i].IsDNF() == true)
                         {
                             listBox7.Items.Add($"Pos: {i + 1} - {pilot.FullName} - {pilot.Team.Name} - DNF");
                             listBox7.Items.Add($"\t\tcrash on lap {result.RaceRes[i].LapNumDNF}");
                         }
-                        else {
+                        else
+                        {
                             listBox7.Items.Add($"Pos: {i + 1} - {pilot.FullName} - {pilot.Team.Name}");
                             listBox7.Items.Add($"\t\t+{(result.RaceRes[i].TimeResult - result.RaceRes[0].TimeResult).ToString(@"m\:ss\.fff")}");
                         }
@@ -379,6 +464,11 @@ namespace DesktopF1Game
             {
                 lb.Items.Add($"#{pos++}\t{res.TimeResult.ToString(@"mm\:ss\:fff")}\t{pilots.First(x => x.Number == res.PID).ShortName} - {res.PID}");
             }
+        }
+
+        private void label12_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }

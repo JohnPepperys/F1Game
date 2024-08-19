@@ -12,7 +12,7 @@ namespace GameClass
         /// full pilot name in format <Name,Surname>, for example: "Charles,Leclear"
         /// </summary>
         string _name, _surname;
-        public string Surame { get { return _surname;} }       // return Leclear
+        public string Surname { get { return _surname;} }       // return Leclear
         public string Name { get { return _name;} }         // return Charles
         public string ShortName { get { return _surname.Substring(0, 3); } }   // return Lec
         public string FullName { get { return $"{_name} {_surname}"; } }

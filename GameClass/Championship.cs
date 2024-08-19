@@ -26,8 +26,9 @@ namespace GameClass
         /// </summary>
         static List<F1Track> _Tracks = new List<F1Track>();
 
-        static Dictionary<int, int> _teamPoint = new Dictionary<int, int>();
-        static Dictionary<int, int> _pilotPoint = new Dictionary<int, int>();
+        static Dictionary<int, (int, int)> _teamPoint = new Dictionary<int, (int, int)>();
+        // static Dictionary<int, int> _pilotPoint = new Dictionary<int, int>();
+        static List<PilotPoint> _pilotPoints = new List<PilotPoint>();
 
         static Queue<int> _tracksQueue = new Queue<int>();
 
@@ -42,7 +43,7 @@ namespace GameClass
             _Teams.Clear();
             _Pilots.Clear();
             _Tracks.Clear();
-            _pilotPoint.Clear();
+            _pilotPoints.Clear();
             _teamPoint.Clear();
             _tracksQueue.Clear();
             _eachRaceResult.Clear();
@@ -53,9 +54,9 @@ namespace GameClass
             _Tracks.AddRange(GameCommon.InitTracks());
 
             foreach (var team in _Teams)
-                _teamPoint.Add(team.Id, 0);
+                _teamPoint.Add(team.Id, (0, 0));
             foreach (var pilot in _Pilots)
-                _pilotPoint.Add(pilot.Number, 0);
+                _pilotPoints.Add(new PilotPoint(pilot.Number));
             foreach (var tr in _Tracks)
                 _tracksQueue.Enqueue(tr.ID);
             isInit = true;
@@ -129,11 +130,18 @@ namespace GameClass
             }
 
             // начисляем за гонку очки пилотам и их командам - первые 10 получают очки 
-            for (int i = 0; i < 10; i++)
+            //var teamsVal = _teamPoint.Values.ToArray();
+            //for (int x = 0; x < teamsVal.Length; x++)
+                //teamsVal[x] = (teamsVal[x].Item1, 0);
+            var teamkey = _teamPoint.Keys.ToArray();
+            foreach (var key in teamkey)
+                _teamPoint[key] = (_teamPoint[key].Item1, 0);
+            for (int i = 0; i < 20; i++)
             {
-                _pilotPoint[stageResultPilots[i].PID] += GameCommon.ResultPoints[i];
-                _teamPoint[_Pilots.First(x => x.Number == stageResultPilots[i].PID).Team.Id] += GameCommon.ResultPoints[i];
-                
+                _pilotPoints.First(x => x.PilotID == stageResultPilots[i].PID).AddRaceResult(GameCommon.ResultPoints[i], i+1, nowRaceOnTrack);
+                var teams = _teamPoint[_Pilots.First(x => x.Number == stageResultPilots[i].PID).Team.Id];
+                _teamPoint[_Pilots.First(x => x.Number == stageResultPilots[i].PID).Team.Id] = (teams.Item1 + GameCommon.ResultPoints[i], teams.Item2 + GameCommon.ResultPoints[i]);
+                // teams = (teams.Item1 + GameCommon.ResultPoints[i], teams.Item2 + GameCommon.ResultPoints[i]);
             }
             // после проведения гонки меняем статус
             nowStatus = RaceWeekendStatus.FinishRace;
@@ -144,8 +152,11 @@ namespace GameClass
 
         private static void _startWeekend ()
         {
-            if (_tracksQueue.TryDequeue(out nowRaceOnTrack) == false)
-                throw new Exception("Finish season!");
+            if (_tracksQueue.TryDequeue(out nowRaceOnTrack) == false) {
+                nowStatus = RaceWeekendStatus.FinishChampionship;
+                return;
+            }
+                
             nowStatus = RaceWeekendStatus.BeforeWeekendStart;
         }
 
@@ -276,25 +287,42 @@ namespace GameClass
 
 
 
-        public static IEnumerable<string> GetPilotsStanding()
+        public static IEnumerable<DisplayPilotPosition> GetPilotsStanding()
         {
-            List<string> res = new List<string>();
+            List<DisplayPilotPosition> res = new List<DisplayPilotPosition>();
             int position = 1;
-            foreach (var pair in _pilotPoint.OrderBy(p => p.Value).Reverse()) {
-                res.Add($"{position}.\t{_Pilots.First(x => x.Number == pair.Key).FullName}\t(lrp)\t{pair.Value}");
+            _pilotPoints.Sort();
+            foreach (var points in _pilotPoints) {
+                //res.Add($"{position}. " + points.GetPositionStr());
+                // res.Add((position, _Pilots.First(x => x.Number == points.PilotID).FullName, points.Points, points.TopPosition));
+                res.Add(new DisplayPilotPosition() { 
+                    pos = position,
+                    name = _Pilots.First(x => x.Number == points.PilotID).FullName,
+                    pnum = points.PilotID,
+                    point = points.Points,
+                    top = points.TopPosition,
+                    team = _Pilots.First(x => x.Number == points.PilotID).Team.Name
+                });
                 position++;
             }
             return res;
         }
 
 
-        public static IEnumerable<string> GetTeamsStanding()
+        public static IEnumerable<DisplayTeamPosition> GetTeamsStanding()
         {
-            List<string> res = new List<string>();
+            List<DisplayTeamPosition> res = new List<DisplayTeamPosition>();
             int position = 1;
             foreach (var pair in _teamPoint.OrderBy(p => p.Value).Reverse())
             {
-                res.Add($"{position}.\t{_Teams.First(x => x.Id == pair.Key).Name}\t(lrp)\t{pair.Value}");
+                //res.Add($"{position}.\t{_Teams.First(x => x.Id == pair.Key).Name}\t(lrp)\t{pair.Value}");
+                res.Add(new DisplayTeamPosition()
+                {
+                    pos = position,
+                    name = _Teams.First(x => x.Id == pair.Key).Name,
+                    point = pair.Value.Item1,
+                    last = pair.Value.Item2,
+                });
                 position++;
             }
             return res;

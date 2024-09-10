@@ -100,12 +100,12 @@ namespace GameClass
                 if (i == 1)     // если первый круг - там учавствуют все пилоты
                 {
                     // результаты одного круга для всех пилотов
-                    var resOneLap = MakeOneLapForAllPilots(nowRaceOnTrack, _Pilots.Select(x => x.Number));
+                    var resOneLap = MakeOneRaceLapForAllPilots(nowRaceOnTrack, _Pilots.Select(x => x.Number));
                     stageResultPilots.AddRange(resOneLap);
                 }
                 else          // если не первый круг - там учавствуют не все пилоты, а те которые не сошли на предыдущем круге
                 {
-                    var resOneLap = MakeOneLapForAllPilots(nowRaceOnTrack, stageResultPilots.Where(x => x.IsDNF() == false).Select(y => y.PID));
+                    var resOneLap = MakeOneRaceLapForAllPilots(nowRaceOnTrack, stageResultPilots.Where(x => x.IsDNF() == false).Select(y => y.PID));
                     foreach (var res in resOneLap) {
                         // добавляем время очередного круга к пилотам
                         stageResultPilots.First(x => x.PID == res.PID).AddLapTime(res.TimeResult, i);
@@ -146,6 +146,41 @@ namespace GameClass
             // после проведения гонки меняем статус
             nowStatus = RaceWeekendStatus.FinishRace;
         }
+
+
+
+        /// <summary>
+        /// Make one Race lap for all pilots. 
+        /// </summary>
+        /// <param name="trackid"></param>
+        /// <param name="pilotList"></param>
+        /// <returns>Dictionary: <pilotnumber - lap time></returns>
+        /// <exception cref="ArgumentException"></exception>
+        /// <exception cref="Exception"></exception>
+        private static List<StageResultPilot> MakeOneRaceLapForAllPilots(int trackid, IEnumerable<int> pilotList)
+        {
+            // check income params
+            if (trackid < 0 || trackid > _Tracks.Count())
+                throw new ArgumentException("Unnormal track ID.");
+            if (pilotList == null || pilotList.Count() < 8)
+                throw new Exception("Unnormal pilots list");
+            var track = _Tracks.First(x => x.ID == trackid);
+
+            // make one lap
+            var allResult = new List<StageResultPilot>();
+            foreach (var pilotNum in pilotList)
+            {
+                var pilot = _Pilots.First(x => x.Number == pilotNum);
+                var result = OneLapTime.MakeOneRaceLap_PilotExpirience(track, pilot);
+                allResult.Add(new StageResultPilot(pilotNum, result));
+            }
+
+            // output results
+            return allResult;
+        }
+
+
+
 
         // ------------------------------------------------------------------------------------------------------------------------------------------- //
         // ------------------------------------------------------------ Qualification ---------------------------------------------------------------- //
@@ -210,8 +245,8 @@ namespace GameClass
         /// <returns></returns>
         private static List<StageResultPilot> MakeQSegment(int trackid, IEnumerable<int> pilotList) {
             // все делают два круга - берется лучшее время круга.
-            var result1 = MakeOneLapForAllPilots(trackid, pilotList);
-            var result2 = MakeOneLapForAllPilots(trackid, pilotList);
+            var result1 = MakeOneQualifyingLapForAllPilots(trackid, pilotList);
+            var result2 = MakeOneQualifyingLapForAllPilots(trackid, pilotList);
 
             var res = new List<StageResultPilot> ();
             for (int i = 0; i < result1.Count(); i++)
@@ -234,7 +269,7 @@ namespace GameClass
         /// <returns>Dictionary: <pilotnumber - lap time></returns>
         /// <exception cref="ArgumentException"></exception>
         /// <exception cref="Exception"></exception>
-        private static List<StageResultPilot> MakeOneLapForAllPilots(int trackid, IEnumerable<int> pilotList)
+        private static List<StageResultPilot> MakeOneQualifyingLapForAllPilots(int trackid, IEnumerable<int> pilotList)
         {
             // check income params
             if (trackid < 0 || trackid > _Tracks.Count())
@@ -248,7 +283,7 @@ namespace GameClass
             foreach (var pilotNum in pilotList)
             {
                 var pilot = _Pilots.First(x => x.Number == pilotNum);
-                var result = MakeOneLap(track, pilot);
+                var result = OneLapTime.MakeOneQualifyingLap_PilotExpirience(track, pilot);
                 allResult.Add(new StageResultPilot(pilotNum, result));
             }
 
@@ -256,31 +291,6 @@ namespace GameClass
             return allResult;
         }
         
-        
-        /// <summary>
-        /// Make one lap for one pilot
-        /// </summary>
-        /// <param name="track"></param>
-        /// <param name="pilot"></param>
-        /// <returns>TimeSpan - time of one lap, if lap was successful. If was crash - return TimeSpan.MinValue </returns>
-        /// <exception cref="ArgumentNullException"></exception>
-        private static TimeSpan MakeOneLap(F1Track track, F1Pilot pilot)
-        {
-            if (track == null || pilot == null)
-                throw new ArgumentNullException("Track or Pilot is null!");
-            var rand = new Random();
-            /// check that pilot don't crash on this lap
-            var crashchance = rand.Next(1001);
-            if (crashchance > 996)
-            {
-                return TimeSpan.MinValue;
-            }
-            // calc lap
-            (var minTime, var maxTime) = track.GetMinMaxQualifingTime();
-            var delta = (int)(maxTime - minTime).TotalMilliseconds;
-            return minTime + TimeSpan.FromMilliseconds(rand.Next(delta));
-        }
-
         public static RaceResult GetRaceResultForTrack(int trId) {
             return _eachRaceResult.FirstOrDefault(x => x.TrackID == trId);
         }

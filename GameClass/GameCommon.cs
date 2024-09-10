@@ -81,7 +81,15 @@ namespace GameClass
                 new F1Track(5, "Shanghai", "China", 305066, 56, new TimeSpan(0, 0, 1, 33, 550), new TimeSpan(0, 0, 1, 37, 700), false),
                 new F1Track(6, "Miami", "USA", 308326, 57, new TimeSpan(0, 0, 1, 27, 150), new TimeSpan(0, 0, 1, 30, 540), false),
                 new F1Track(7, "Emilia-Romagna", "Italy", 309049, 63, new TimeSpan(0, 0, 1, 14, 680), new TimeSpan(0, 0, 1, 18, 490), false),
-                new F1Track(8, "Monaco", "Monaco", 260286, 78, new TimeSpan(0, 0, 1, 10, 250), new TimeSpan(0, 0, 1, 14, 100), false)
+                new F1Track(8, "Monaco", "Monaco", 260286, 78, new TimeSpan(0, 0, 1, 10, 250), new TimeSpan(0, 0, 1, 14, 100), false),
+
+                new F1Track(9, "Montreal", "Canada", 305270, 70, new TimeSpan(0, 0, 1, 11, 600), new TimeSpan(0, 0, 1, 14, 750), false),
+                new F1Track(10, "Barcelona", "Spain", 307362, 66, new TimeSpan(0, 0, 1, 11, 300), new TimeSpan(0, 0, 1, 17, 010), false),
+                new F1Track(11, "Spielberg", "Austria", 306452, 71, new TimeSpan(0, 0, 1, 04, 280), new TimeSpan(0, 0, 1, 07, 500), false),
+                new F1Track(12, "Silverstone", "Great Britan", 306198, 52, new TimeSpan(0, 0, 1, 25, 700), new TimeSpan(0, 0, 1, 28, 150), false),
+
+                new F1Track(13, "Hungaroring", "Hungary", 306630, 70, new TimeSpan(0, 0, 1, 15, 150), new TimeSpan(0, 0, 1, 20, 300), false),
+                new F1Track(14, "Spa-Francorchamps", "Belgium", 308052, 44, new TimeSpan(0, 0, 1, 43, 200), new TimeSpan(0, 0, 1, 44, 600), false)
             };
         }
     }
